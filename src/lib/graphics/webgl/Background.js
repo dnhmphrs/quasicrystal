@@ -21,6 +21,7 @@ uniform float aspectRatio;
 // Function to compute distance to the nearest hexagon center
 float hexagon(vec2 p, float scale) {
   const float sqrt3 = sqrt(3.0);
+  
   p.x *= aspectRatio; // Apply scaling here for both aspect ratio and hexagon size
   // Hexagonal lattice transformation with scaling applied
   vec2 a = mod(p, vec2(3.0 * scale, sqrt3 * scale)) - vec2(1.5 * scale, sqrt3 / 2.0 * scale);
@@ -31,25 +32,27 @@ float hexagon(vec2 p, float scale) {
 
 void main() {
     vec2 uv = vUv * 2.0 - 1.0;
+    float scale = PI / 2.0;
+    
     float dist1 = hexagon(uv, 1.0);
-    float dist2 = hexagon(uv, 1.0 / (PI * 0.5) );
-    float dist3 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) );
-    float dist4 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
-    float dist5 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
-    float dist6 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
-    float dist7 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
-    float dist8 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
+    float dist2 = hexagon(uv, 1.0 / pow(scale, 1.0) );
+    float dist3 = hexagon(uv, 1.0 / pow(scale, 2.0) );
+    float dist4 = hexagon(uv, 1.0 / pow(scale, 3.0) );
+    float dist5 = hexagon(uv, 1.0 / pow(scale, 4.0) );
+    float dist6 = hexagon(uv, 1.0 / pow(scale, 5.0) );
+    float dist7 = hexagon(uv, 1.0 / pow(scale, 6.0) );
+    float dist8 = hexagon(uv, 1.0 / pow(scale, 7.0) );
 
-    float sclaedTime = time * 0.0000001;
+    float scaledTime = (time * scale * 0.000001) - 0.000001;
 
-    vec3 color1 = vec3(0.5 + 0.5 * tan(sclaedTime / dist1), 0.5 + 0.5 * tan(sclaedTime / dist1), 0.5);
-    vec3 color2 = vec3(0.5 + 0.5 * tan(sclaedTime / dist2), 0.5 + 0.5 * tan(sclaedTime / dist2), 0.5);
-    vec3 color3 = vec3(0.5 + 0.5 * tan(sclaedTime / dist3), 0.5 + 0.5 * tan(sclaedTime / dist3), 0.5);
-    vec3 color4 = vec3(0.5 + 0.5 * tan(sclaedTime / dist4), 0.5 + 0.5 * tan(sclaedTime / dist4), 0.5);
-    vec3 color5 = vec3(0.5 + 0.5 * tan(sclaedTime / dist5), 0.5 + 0.5 * tan(sclaedTime / dist5), 0.5);
-    vec3 color6 = vec3(0.5 + 0.5 * tan(sclaedTime / dist6), 0.5 + 0.5 * tan(sclaedTime / dist6), 0.5);
-    vec3 color7 = vec3(0.5 + 0.5 * tan(sclaedTime / dist7), 0.5 + 0.5 * tan(sclaedTime / dist7), 0.5);
-    vec3 color8 = vec3(0.5 + 0.5 * tan(sclaedTime / dist8), 0.5 + 0.5 * tan(sclaedTime / dist8), 0.5);
+    vec3 color1 = vec3(0.5 + 0.5 * tan(scaledTime / dist1), 0.5 + 0.5 * sin(scaledTime / dist1), 0.5 + 0.5 * cos(scaledTime / dist1));
+    vec3 color2 = vec3(0.5 + 0.5 * tan(scaledTime / dist2), 0.5 + 0.5 * sin(scaledTime / dist2), 0.5 + 0.5 * cos(scaledTime / dist2));
+    vec3 color3 = vec3(0.5 + 0.5 * tan(scaledTime / dist3), 0.5 + 0.5 * sin(scaledTime / dist3), 0.5 + 0.5 * cos(scaledTime / dist3));
+    vec3 color4 = vec3(0.5 + 0.5 * tan(scaledTime / dist4), 0.5 + 0.5 * sin(scaledTime / dist4), 0.5 + 0.5 * cos(scaledTime / dist4));
+    vec3 color5 = vec3(0.5 + 0.5 * tan(scaledTime / dist5), 0.5 + 0.5 * sin(scaledTime / dist5), 0.5 + 0.5 * cos(scaledTime / dist5));
+    vec3 color6 = vec3(0.5 + 0.5 * tan(scaledTime / dist6), 0.5 + 0.5 * sin(scaledTime / dist6), 0.5 + 0.5 * cos(scaledTime / dist6));
+    vec3 color7 = vec3(0.5 + 0.5 * tan(scaledTime / dist7), 0.5 + 0.5 * sin(scaledTime / dist7), 0.5 + 0.5 * cos(scaledTime / dist7));
+    vec3 color8 = vec3(0.5 + 0.5 * tan(scaledTime / dist8), 0.5 + 0.5 * sin(scaledTime / dist8), 0.5 + 0.5 * cos(scaledTime / dist8));
 
     vec3 color = mix(color1, color2, 0.5);
     color = mix(color, color3, 0.5);
