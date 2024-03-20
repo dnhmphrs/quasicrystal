@@ -4,69 +4,115 @@ const bgVertShaderSource = `
   attribute vec2 position;
   varying vec2 vUv;
   void main() {
-    vUv = position * 0.5 + 0.5;
+    vUv = position * 1.0 + 1.0;
     gl_Position = vec4(position, 0, 1);
   }
 `;
 
 const bgFragShaderSource = `
-  precision highp float;
-  varying vec2 vUv;
-  uniform float time;
-  uniform float aspectRatio;
-  
-  // float soften(float value) {
-  //   // Non-linear scaling function to soften transitions
-  //   return  value * (2.71828 + 2.71828 * value);
-  // }
+precision highp float;
 
-  
-  void main() {
-    float zoom = 1.0;
-    float timescale = 0.00025;
+#define PI 3.1415926535897932384626433832795
 
-    vec2 adjustedPosition = (vUv - 0.5) / zoom + 0.5;
-    adjustedPosition.x *= aspectRatio; // Adjust for aspect ratio
+varying vec2 vUv;
+uniform float time;
+uniform float aspectRatio;
 
-    // Define pastel colors directly in the shader
-    // vec3 sunshade = vec3(1.0, 0.5882, 0.3098); // sunshade
-    vec3 primary = vec3(0.9, 0.4882, 0.3098);
-    /// vec3 primary = vec3(1.0, 0.5882, 0.3098);
-    vec3 pastel1 = vec3(1.0, 0.7137, 0.7569); // Pastel pink
-    vec3 pastel2 = vec3(0.5961, 1.0, 0.5961); // Mint green
-    vec3 pastel3 = vec3(0.9020, 0.9020, 0.9804); // Lavender
+// Function to compute distance to the nearest hexagon center
+float hexagon(vec2 p, float scale) {
+  const float sqrt3 = sqrt(3.0);
+  p.x *= aspectRatio; // Apply scaling here for both aspect ratio and hexagon size
+  // Hexagonal lattice transformation with scaling applied
+  vec2 a = mod(p, vec2(3.0 * scale, sqrt3 * scale)) - vec2(1.5 * scale, sqrt3 / 2.0 * scale);
+  vec2 b = mod(p - vec2(1.5 * scale, sqrt3 / 2.0 * scale), vec2(3.0 * scale, sqrt3 * scale)) - vec2(1.5 * scale, sqrt3 / 2.0 * scale);
+  // Return distance to the closest point, adjusted for scale
+  return -(min(dot(a, a), dot(b, b)) - (1.0 / 4.0) * scale * scale);
+}
 
-    // Adjust the center position
-    vec2 center = vec2(0.5, 0.5);
-    center.x *= aspectRatio;
+void main() {
+    vec2 uv = vUv * 2.0 - 1.0;
+    float dist1 = hexagon(uv, 1.0);
+    float dist2 = hexagon(uv, 1.0 / (PI * 0.5) );
+    float dist3 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) );
+    float dist4 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
+    float dist5 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
+    float dist6 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
+    float dist7 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
+    float dist8 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
 
-    // Stabilize the band size
-    // float bandSize = 0.1 + sin(time * timescale) * 0.025; 
-    float bandSize = 0.075;
-    float dist = length(adjustedPosition - center);
-    float bandedDist = fract(dist / bandSize) * bandSize / dist * fract(dist / bandSize);
+    float sclaedTime = time * 0.0000001;
 
-    // Smoother wave effect
-    float wave = 2.71828 * timescale + -sin(bandedDist * 3.142 * 0.5 + (time * timescale));
+    vec3 color1 = vec3(0.5 + 0.5 * tan(sclaedTime / dist1), 0.5 + 0.5 * tan(sclaedTime / dist1), 0.5);
+    vec3 color2 = vec3(0.5 + 0.5 * tan(sclaedTime / dist2), 0.5 + 0.5 * tan(sclaedTime / dist2), 0.5);
+    vec3 color3 = vec3(0.5 + 0.5 * tan(sclaedTime / dist3), 0.5 + 0.5 * tan(sclaedTime / dist3), 0.5);
+    vec3 color4 = vec3(0.5 + 0.5 * tan(sclaedTime / dist4), 0.5 + 0.5 * tan(sclaedTime / dist4), 0.5);
+    vec3 color5 = vec3(0.5 + 0.5 * tan(sclaedTime / dist5), 0.5 + 0.5 * tan(sclaedTime / dist5), 0.5);
+    vec3 color6 = vec3(0.5 + 0.5 * tan(sclaedTime / dist6), 0.5 + 0.5 * tan(sclaedTime / dist6), 0.5);
+    vec3 color7 = vec3(0.5 + 0.5 * tan(sclaedTime / dist7), 0.5 + 0.5 * tan(sclaedTime / dist7), 0.5);
+    vec3 color8 = vec3(0.5 + 0.5 * tan(sclaedTime / dist8), 0.5 + 0.5 * tan(sclaedTime / dist8), 0.5);
 
-    // Sample the noise texture
-    // float noiseEffect = texture2D(uNoiseTexture, vUv).r;
-
-    // // Create a high-frequency noise pattern
-    float noisePattern = sin(dot(adjustedPosition, vec2(12.9898, 78.233)) * 30.0 + time * timescale)
-                       + cos(dot(adjustedPosition, vec2(43.2321, 29.1234)) * 30.0 - time * timescale);
-    float noiseEffect = abs(noisePattern);
-
-    float range1 = step(0.33, noiseEffect);
-    // float range2 = step(0.66, noiseEffect) * (1.0 - range1); // Apply only if range1 is not active
-    // float range3 = 1.0 - step(0.66, noiseEffect); // Apply only if range2 is not active
-    
-    vec3 color = mix(primary, pastel1, range1 * -wave );
-    color = mix(primary, color, wave * noiseEffect );
+    vec3 color = mix(color1, color2, 0.5);
+    color = mix(color, color3, 0.5);
+    color = mix(color, color4, 0.5);
+    color = mix(color, color5, 0.5);
+    color = mix(color, color6, 0.5);
+    color = mix(color, color7, 0.5);
+    color = mix(color, color8, 0.5);
 
     gl_FragColor = vec4(color, 1.0);
-  }
+}
 `;
+
+// const bgFragShaderSource = `
+// precision highp float;
+
+// #define PI 3.1415926535897932384626433832795
+
+// varying vec2 vUv;
+// uniform float time;
+// uniform float aspectRatio;
+
+// // Function to compute distance to the nearest hexagon center
+// float hexagon(vec2 p, float scale) {
+//   const float sqrt3 = sqrt(3.0);
+//   p.x *= aspectRatio;
+//   // Hexagonal lattice transformation with scaling applied
+//   vec2 a = mod(p, vec2(3.0 * scale, sqrt3 * scale)) - vec2(1.5 * scale, sqrt3 / 2.0 * scale);
+//   vec2 b = mod(p - vec2(1.5 * scale, sqrt3 / 2.0 * scale), vec2(3.0 * scale, sqrt3 * scale)) - vec2(1.5 * scale, sqrt3 / 2.0 * scale);
+//   // Return distance to the closest point, adjusted for scale
+//   return min(dot(a, a), dot(b, b));
+// }
+
+// void main() {
+//     vec2 uv = vUv * 2.0 - 1.0;
+//     float dist1 = hexagon(uv, 1.0);
+//     float dist2 = hexagon(uv, 1.0 / (PI * 0.5) );
+//     float dist3 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) );
+//     float dist4 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
+//     float dist5 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
+//     float dist6 = hexagon(uv, 1.0 / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) / (PI * 0.5) );
+
+//     // Create a dot at each vertex
+//     float radius = 0.01; // Radius of each dot
+
+//     float alpha1 = smoothstep(radius * 0.8, radius, sqrt(dist1));
+//     float alpha2 = smoothstep(radius * 0.8, radius, sqrt(dist2));
+//     float alpha3 = smoothstep(radius * 0.8, radius, sqrt(dist3));
+//     float alpha4 = smoothstep(radius * 0.8, radius, sqrt(dist4));
+//     float alpha5 = smoothstep(radius * 0.8, radius, sqrt(dist5));
+//     float alpha6 = smoothstep(radius * 0.8, radius, sqrt(dist6));
+
+//     float alpha = min(alpha1, alpha2);
+//     alpha = min(alpha, alpha3);
+//     alpha = min(alpha, alpha4);
+//     alpha = min(alpha, alpha5);
+//     alpha = min(alpha, alpha6);
+
+//     vec3 color = vec3(1.0, 1.0, 1.0); // Color of the dots
+//     gl_FragColor = vec4(color, alpha);
+// }
+
+// `;
 
 export function setupBackground(gl) {
 	const program = createShaderProgram(gl, bgVertShaderSource, bgFragShaderSource);
