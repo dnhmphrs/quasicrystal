@@ -46,7 +46,7 @@
 
 <svelte:head>
 	<title>Der logische Aufbau der Web</title>
-	<meta name="description" content="WIP" />
+	<meta name="description" content="" />
 	<meta name="keywords" content="" />
 	<meta name="author" content="AUFBAU" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
