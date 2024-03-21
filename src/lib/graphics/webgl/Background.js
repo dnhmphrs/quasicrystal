@@ -32,7 +32,7 @@ float hexagon(vec2 p, float scale) {
 
 void main() {
     vec2 uv = vUv * 1.0 - 1.0;
-    float scale = PI / 2.0;
+    float scale = sqrt(2.0); // PI / 2.0;
     
     float dist1 = hexagon(uv, 1.0);
     float dist2 = hexagon(uv, 1.0 / pow(scale, 1.0) );
