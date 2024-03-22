@@ -43,7 +43,7 @@ void main() {
     float dist7 = hexagon(uv, 1.0 / pow(scale, 6.0) );
     float dist8 = hexagon(uv, 1.0 / pow(scale, 7.0) );
 
-    float scaledTime = (time * scale * 0.0000005) + 0.1;
+    float scaledTime = (time * scale * 0.00000025) + 0.1;
 
     vec3 color1 = vec3(0.5 + 0.5 * tan(scaledTime / dist1), 0.5 + 0.5 * sin(scaledTime / dist1), 0.5 + 0.5 * cos(scaledTime / dist1));
     vec3 color2 = vec3(0.5 + 0.5 * tan(scaledTime / dist2), 0.5 + 0.5 * sin(scaledTime / dist2), 0.5 + 0.5 * cos(scaledTime / dist2));
