@@ -9,7 +9,6 @@
 	}
 
 	p {
-
 		font-weight: 900;
 	}
 </style>
