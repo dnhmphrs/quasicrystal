@@ -43,7 +43,7 @@ void main() {
 
   // Scale and rotation setup
   float scale = sqrt(2.0);
-  float baseAngle = PI / 2.0; // Base angle for 90-degree rotation
+  float baseAngle = PI / 4.0; // Base angle for 45-degree rotation
 
   // Computing distances for scaled and rotated hexagons
   float dist1 = hexagon(uv, 1.0, 0.0); // Original scale, no rotation
