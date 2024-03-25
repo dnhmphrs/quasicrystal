@@ -18,32 +18,44 @@ varying vec2 vUv;
 uniform float time;
 uniform float aspectRatio;
 
-// Function to compute distance to the nearest hexagon center
-float hexagon(vec2 p, float scale) {
-  const float sqrt3 = sqrt(3.0);
-  
-  p.x *= aspectRatio; // Apply scaling here for both aspect ratio and hexagon size
-  // Hexagonal lattice transformation with scaling applied
-  vec2 a = mod(p, vec2(3.0 * scale, sqrt3 * scale)) - vec2(1.5 * scale, sqrt3 / 2.0 * scale);
-  vec2 b = mod(p - vec2(1.5 * scale, sqrt3 / 2.0 * scale), vec2(3.0 * scale, sqrt3 * scale)) - vec2(1.5 * scale, sqrt3 / 2.0 * scale);
-  // Return distance to the closest point, adjusted for scale
-  return -(min(dot(a, a), dot(b, b)) - (1.0 / 4.0) * scale * scale);
+// Rotate a point by a given angle
+vec2 rotate(vec2 p, float angle) {
+    float s = sin(angle);
+    float c = cos(angle);
+    // Rotation matrix application
+    return vec2(p.x * c - p.y * s, p.x * s + p.y * c);
+}
+
+float hexagon(vec2 p, float scale, float rotation) {
+    const float sqrt3 = sqrt(3.0);
+    p = rotate(p, rotation); // Rotate the point by the given angle
+    p.x *= aspectRatio; // Correct aspect ratio before tiling
+    
+    // Hexagonal lattice transformation
+    vec2 a = mod(p, vec2(3.0 * scale, sqrt3 * scale)) - vec2(1.5 * scale, sqrt3 / 2.0 * scale);
+    vec2 b = mod(p - vec2(1.5 * scale, sqrt3 / 2.0 * scale), vec2(3.0 * scale, sqrt3 * scale)) - vec2(1.5 * scale, sqrt3 / 2.0 * scale);
+
+    return -(min(dot(a, a), dot(b, b)) - (1.0 / 4.0) * scale * scale);
 }
 
 void main() {
-    vec2 uv = vUv * 1.0 - 1.0;
-    float scale = PI / 2.0;
-    
-    float dist1 = hexagon(uv, 1.0);
-    float dist2 = hexagon(uv, 1.0 / pow(scale, 1.0) );
-    float dist3 = hexagon(uv, 1.0 / pow(scale, 2.0) );
-    float dist4 = hexagon(uv, 1.0 / pow(scale, 3.0) );
-    float dist5 = hexagon(uv, 1.0 / pow(scale, 4.0) );
-    float dist6 = hexagon(uv, 1.0 / pow(scale, 5.0) );
-    float dist7 = hexagon(uv, 1.0 / pow(scale, 6.0) );
-    float dist8 = hexagon(uv, 1.0 / pow(scale, 7.0) );
+  vec2 uv = vUv * 1.0 - 1.0; // Centering and scaling UV coordinates
 
-    float scaledTime = (time * scale * 0.0000001) + 2.0;
+  // Scale and rotation setup
+  float scale = sqrt(2.0);
+  float baseAngle = PI / 2.0; // Base angle for 90-degree rotation
+
+  // Computing distances for scaled and rotated hexagons
+  float dist1 = hexagon(uv, 1.0, 0.0); // Original scale, no rotation
+  float dist2 = hexagon(uv, 1.0 / scale, baseAngle * 1.0);
+  float dist3 = hexagon(uv, 1.0 / pow(scale, 2.0), baseAngle * 2.0);
+  float dist4 = hexagon(uv, 1.0 / pow(scale, 3.0), baseAngle * 3.0);
+  float dist5 = hexagon(uv, 1.0 / pow(scale, 4.0), baseAngle * 4.0);
+  float dist6 = hexagon(uv, 1.0 / pow(scale, 5.0), baseAngle * 5.0);
+  float dist7 = hexagon(uv, 1.0 / pow(scale, 6.0), baseAngle * 6.0);
+  float dist8 = hexagon(uv, 1.0 / pow(scale, 7.0), baseAngle * 7.0);
+
+    float scaledTime = (time * scale * 0.00000025) + 2.0;
 
     vec3 color1 = vec3(0.3 + 0.7 * tan(scaledTime / dist1), 0.3 + 0.7 * sin(scaledTime / dist1), 0.3 + 0.7 * cos(scaledTime / dist1));
     vec3 color2 = vec3(0.3 + 0.7 * tan(scaledTime / dist2), 0.3 + 0.7 * sin(scaledTime / dist2), 0.3 + 0.7 * cos(scaledTime / dist2));
