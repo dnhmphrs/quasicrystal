@@ -43,7 +43,7 @@ void main() {
 
   // Scale and rotation setup
   float scale = sqrt(2.0);
-  float baseAngle = PI / 4.0; // Base angle for 45-degree rotation
+  float baseAngle = PI / 2.0; // Base angle for 45-degree rotation
 
   // Computing distances for scaled and rotated hexagons
   float dist1 = hexagon(uv, 1.0, 0.0); // Original scale, no rotation
@@ -55,7 +55,7 @@ void main() {
   float dist7 = hexagon(uv, 1.0 / pow(scale, 6.0), baseAngle * 6.0);
   float dist8 = hexagon(uv, 1.0 / pow(scale, 7.0), baseAngle * 7.0);
 
-    float scaledTime = (time * scale * 0.00000025) + 2.0;
+    float scaledTime = (time * scale * 0.0000005) + 2.0;
 
     vec3 color1 = vec3(0.3 + 0.7 * tan(scaledTime / dist1), 0.3 + 0.7 * sin(scaledTime / dist1), 0.3 + 0.7 * cos(scaledTime / dist1));
     vec3 color2 = vec3(0.3 + 0.7 * tan(scaledTime / dist2), 0.3 + 0.7 * sin(scaledTime / dist2), 0.3 + 0.7 * cos(scaledTime / dist2));
