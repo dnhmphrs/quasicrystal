@@ -42,7 +42,7 @@ void main() {
   vec2 uv = vUv * 1.0 - 1.0; // Centering and scaling UV coordinates
 
   // Scale and rotation setup
-  float scale = sqrt(2.0);
+  float scale = PI / 2.0; //sqrt(2.0);
   float baseAngle = PI / 2.0; // Base angle for 90-degree rotation
 
   // Computing distances for scaled and rotated hexagons
@@ -55,16 +55,16 @@ void main() {
   float dist7 = hexagon(uv, 1.0 / pow(scale, 6.0), baseAngle * 6.0);
   float dist8 = hexagon(uv, 1.0 / pow(scale, 7.0), baseAngle * 7.0);
 
-    float scaledTime = (time * scale * 0.00000025) + 2.0;
+    float scaledTime = (time * scale * 0.0000001) + 1.0;
 
-    vec3 color1 = vec3(0.3 + 0.7 * tan(scaledTime / dist1), 0.3 + 0.7 * sin(scaledTime / dist1), 0.3 + 0.7 * cos(scaledTime / dist1));
-    vec3 color2 = vec3(0.3 + 0.7 * tan(scaledTime / dist2), 0.3 + 0.7 * sin(scaledTime / dist2), 0.3 + 0.7 * cos(scaledTime / dist2));
-    vec3 color3 = vec3(0.3 + 0.7 * tan(scaledTime / dist3), 0.3 + 0.7 * sin(scaledTime / dist3), 0.3 + 0.7 * cos(scaledTime / dist3));
-    vec3 color4 = vec3(0.3 + 0.7 * tan(scaledTime / dist4), 0.3 + 0.7 * sin(scaledTime / dist4), 0.3 + 0.7 * cos(scaledTime / dist4));
-    vec3 color5 = vec3(0.3 + 0.7 * tan(scaledTime / dist5), 0.3 + 0.7 * sin(scaledTime / dist5), 0.3 + 0.7 * cos(scaledTime / dist5));
-    vec3 color6 = vec3(0.3 + 0.7 * tan(scaledTime / dist6), 0.3 + 0.7 * sin(scaledTime / dist6), 0.3 + 0.7 * cos(scaledTime / dist6));
-    vec3 color7 = vec3(0.3 + 0.7 * tan(scaledTime / dist7), 0.3 + 0.7 * sin(scaledTime / dist7), 0.3 + 0.7 * cos(scaledTime / dist7));
-    vec3 color8 = vec3(0.3 + 0.7 * tan(scaledTime / dist8), 0.3 + 0.7 * sin(scaledTime / dist8), 0.3 + 0.7 * cos(scaledTime / dist8));
+    vec3 color1 = vec3(0.35 + 0.65 * tan(scaledTime / dist1), 0.35 + 0.65 * sin(scaledTime / dist1), 0.35 + 0.65 * cos(scaledTime / dist1));
+    vec3 color2 = vec3(0.35 + 0.65 * tan(scaledTime / dist2), 0.35 + 0.65 * sin(scaledTime / dist2), 0.35 + 0.65 * cos(scaledTime / dist2));
+    vec3 color3 = vec3(0.35 + 0.65 * tan(scaledTime / dist3), 0.35 + 0.65 * sin(scaledTime / dist3), 0.35 + 0.65 * cos(scaledTime / dist3));
+    vec3 color4 = vec3(0.35 + 0.65 * tan(scaledTime / dist4), 0.35 + 0.65 * sin(scaledTime / dist4), 0.35 + 0.65 * cos(scaledTime / dist4));
+    vec3 color5 = vec3(0.35 + 0.65 * tan(scaledTime / dist5), 0.35 + 0.65 * sin(scaledTime / dist5), 0.35 + 0.65 * cos(scaledTime / dist5));
+    vec3 color6 = vec3(0.35 + 0.65 * tan(scaledTime / dist6), 0.35 + 0.65 * sin(scaledTime / dist6), 0.35 + 0.65 * cos(scaledTime / dist6));
+    vec3 color7 = vec3(0.35 + 0.65 * tan(scaledTime / dist7), 0.35 + 0.65 * sin(scaledTime / dist7), 0.35 + 0.65 * cos(scaledTime / dist7));
+    vec3 color8 = vec3(0.35 + 0.65 * tan(scaledTime / dist8), 0.35 + 0.65 * sin(scaledTime / dist8), 0.35 + 0.65 * cos(scaledTime / dist8));
 
     vec3 color = mix(color1, color2, 0.5);
     color = mix(color, color3, 0.5);
