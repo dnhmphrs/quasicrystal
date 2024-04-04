@@ -42,7 +42,7 @@ void main() {
   vec2 uv = vUv * 1.0 - 1.0; // Centering and scaling UV coordinates
 
   // Scale and rotation setup
-  float scale = PI / 2.0; //sqrt(2.0);
+  float scale = (PI / 2.0); //sqrt(2.0);
   float baseAngle = PI / 2.0; // Base angle for 90-degree rotation
 
   // Computing distances for scaled and rotated hexagons
